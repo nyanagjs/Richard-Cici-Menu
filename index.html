@@ -31,7 +31,11 @@
   <section id="tab-menu" class="tab-content active">
     <div class="section-header">
       <h2>所有菜谱 All Recipes</h2>
-      <button class="btn-primary" id="btn-add-dish">+ 添加菜 Add Dish</button>
+      <button class="btn-primary" id="btn-add-dish">+ 添加菜</button>
+    </div>
+    <div class="group-toggle">
+      <button class="toggle-btn active" id="btn-group-ingredient" data-group="ingredient">🥩 按主食材</button>
+      <button class="toggle-btn" id="btn-group-category" data-group="category">📂 按分类</button>
     </div>
     <div id="dish-list"></div>
   </section>
@@ -74,8 +78,39 @@
         <button class="modal-close" id="modal-close">✕</button>
       </div>
       <div class="modal-body">
+
+        <!-- Photo Upload -->
+        <label>图片 Photo</label>
+        <div class="photo-upload-area" id="photo-upload-area">
+          <input type="file" id="photo-input" accept="image/*" style="display:none" />
+          <img id="photo-preview" class="photo-preview hidden" alt="preview" />
+          <div id="photo-placeholder" class="photo-placeholder">
+            <span>📷</span>
+            <span>点击上传图片</span>
+          </div>
+          <button class="btn-remove-photo hidden" id="btn-remove-photo">✕ 删除图片</button>
+        </div>
+
         <label>菜名 Dish Name *</label>
         <input type="text" id="dish-name" placeholder="例：红烧肉" />
+
+        <label>主食材 Main Ingredient</label>
+        <input type="text" id="dish-main-ingredient" placeholder="例：猪肉、鸡肉、蔬菜、海鲜…" list="main-ingredient-suggestions" />
+        <datalist id="main-ingredient-suggestions">
+          <option value="猪肉"></option>
+          <option value="鸡肉"></option>
+          <option value="牛肉"></option>
+          <option value="羊肉"></option>
+          <option value="海鲜"></option>
+          <option value="鱼"></option>
+          <option value="虾"></option>
+          <option value="蔬菜"></option>
+          <option value="豆腐"></option>
+          <option value="蛋类"></option>
+          <option value="主食"></option>
+          <option value="汤"></option>
+          <option value="甜点"></option>
+        </datalist>
 
         <label>分类 Category</label>
         <select id="dish-category">
@@ -86,21 +121,64 @@
           <option value="甜点">甜点 Dessert</option>
         </select>
 
+        <label>基础份量 Base Servings</label>
+        <div class="servings-row">
+          <button class="servings-btn" id="modal-servings-minus">−</button>
+          <input type="number" id="dish-base-servings" value="2" min="1" max="20" />
+          <button class="servings-btn" id="modal-servings-plus">+</button>
+          <span class="servings-label">人份 people</span>
+        </div>
+
         <label>食材 Ingredients</label>
         <div id="ingredients-list" class="item-list"></div>
         <div class="add-item-row">
           <input type="text" id="input-ingredient-name" placeholder="食材名 Name" />
-          <input type="text" id="input-ingredient-amount" placeholder="用量 Amount" />
-          <button class="btn-secondary" id="btn-add-ingredient-item">+ 添加</button>
+          <input type="number" id="input-ingredient-value" placeholder="用量" min="0" step="any" />
+          <select id="input-ingredient-unit" class="unit-select">
+            <option value="g">g</option>
+            <option value="kg">kg</option>
+            <option value="ml">ml</option>
+            <option value="L">L</option>
+            <option value="tbsp">tbsp</option>
+            <option value="tsp">tsp</option>
+            <option value="勺">勺</option>
+            <option value="cup">cup</option>
+            <option value="个">个</option>
+            <option value="只">只</option>
+            <option value="片">片</option>
+            <option value="颗">颗</option>
+            <option value="条">条</option>
+            <option value="块">块</option>
+            <option value="oz">oz</option>
+            <option value="lb">lb</option>
+            <option value="适量">适量</option>
+          </select>
+          <button class="btn-secondary" id="btn-add-ingredient-item">+ 加</button>
         </div>
 
         <label>调味料 Seasonings</label>
         <div id="seasonings-list" class="item-list"></div>
         <div class="add-item-row">
           <input type="text" id="input-seasoning-name" placeholder="调味料名 Name" />
-          <input type="text" id="input-seasoning-amount" placeholder="用量 Amount" />
-          <button class="btn-secondary" id="btn-add-seasoning-item">+ 添加</button>
+          <input type="number" id="input-seasoning-value" placeholder="用量" min="0" step="any" />
+          <select id="input-seasoning-unit" class="unit-select">
+            <option value="g">g</option>
+            <option value="kg">kg</option>
+            <option value="ml">ml</option>
+            <option value="L">L</option>
+            <option value="tbsp">tbsp</option>
+            <option value="tsp">tsp</option>
+            <option value="勺">勺</option>
+            <option value="cup">cup</option>
+            <option value="个">个</option>
+            <option value="片">片</option>
+            <option value="oz">oz</option>
+            <option value="lb">lb</option>
+            <option value="适量">适量</option>
+          </select>
+          <button class="btn-secondary" id="btn-add-seasoning-item">+ 加</button>
         </div>
+
       </div>
       <div class="modal-footer">
         <button class="btn-ghost" id="btn-cancel">取消 Cancel</button>
@@ -116,7 +194,17 @@
         <h3 id="detail-title"></h3>
         <button class="modal-close" id="detail-close">✕</button>
       </div>
-      <div class="modal-body" id="detail-body"></div>
+      <div class="modal-body" id="detail-body">
+        <img id="detail-photo" class="detail-photo hidden" alt="dish photo" />
+        <div class="servings-row" style="margin-bottom:4px">
+          <span style="font-size:0.85rem;color:#666;margin-right:8px">调整份量 Servings:</span>
+          <button class="servings-btn" id="detail-servings-minus">−</button>
+          <input type="number" id="detail-servings" value="2" min="1" max="50" style="width:52px" />
+          <button class="servings-btn" id="detail-servings-plus">+</button>
+          <span class="servings-label">人份</span>
+        </div>
+        <div id="detail-content"></div>
+      </div>
     </div>
   </div>
 

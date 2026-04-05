@@ -36,17 +36,8 @@ header {
   padding: 24px 16px 20px;
 }
 
-header h1 {
-  font-size: 1.6rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
-header .subtitle {
-  font-size: 0.85rem;
-  opacity: 0.85;
-  margin-top: 4px;
-}
+header h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: 0.5px; }
+header .subtitle { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
 
 /* ===== Tab Navigation ===== */
 .tabs {
@@ -76,9 +67,7 @@ header .subtitle {
 }
 
 .tab-btn span { font-size: 0.75rem; }
-
 .tab-btn:hover { color: var(--orange); background: var(--orange-pale); }
-
 .tab-btn.active {
   color: var(--orange);
   border-bottom: 3px solid var(--orange);
@@ -94,13 +83,34 @@ header .subtitle {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   flex-wrap: wrap;
   gap: 8px;
 }
-
 .section-header h2 { font-size: 1.1rem; font-weight: 600; }
 .hint { font-size: 0.8rem; color: var(--gray); width: 100%; margin-top: -8px; }
+
+/* ===== Group Toggle ===== */
+.group-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.toggle-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: white;
+  color: var(--gray);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggle-btn:hover { border-color: var(--orange); color: var(--orange); }
+.toggle-btn.active { background: var(--orange); border-color: var(--orange); color: white; }
 
 /* ===== Buttons ===== */
 .btn-primary {
@@ -169,24 +179,44 @@ header .subtitle {
 .dish-card {
   background: white;
   border-radius: var(--radius);
-  padding: 14px 16px;
+  padding: 12px 14px;
   margin-bottom: 10px;
   box-shadow: var(--shadow);
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
   gap: 12px;
   transition: transform 0.15s, box-shadow 0.15s;
 }
-
 .dish-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+
+.dish-thumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.dish-thumb-placeholder {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  background: var(--gray-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
 
 .dish-info { flex: 1; min-width: 0; }
 
-.dish-name {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 6px;
+.dish-name { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+
+.dish-meta {
+  font-size: 0.75rem;
+  color: var(--gray);
+  margin-bottom: 5px;
 }
 
 .dish-tags { display: flex; flex-wrap: wrap; gap: 4px; }
@@ -198,11 +228,11 @@ header .subtitle {
   background: var(--gray-light);
   color: var(--gray);
 }
-
 .tag.ingredient { background: #E3F2FD; color: #1565C0; }
 .tag.seasoning { background: #F3E5F5; color: #6A1B9A; }
+.tag.main { background: #FFF3E0; color: #E65100; font-weight: 600; }
 
-.dish-actions { display: flex; gap: 4px; flex-shrink: 0; }
+.dish-actions { display: flex; gap: 2px; flex-shrink: 0; flex-direction: column; }
 
 .empty-state {
   text-align: center;
@@ -220,34 +250,45 @@ header .subtitle {
   margin-bottom: 16px;
   box-shadow: var(--shadow);
 }
-
 .pantry-section h2 { font-size: 1rem; font-weight: 600; margin-bottom: 12px; }
 
 .add-item-row {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   margin-bottom: 12px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
-.add-item-row input {
+.add-item-row input[type="text"],
+.add-item-row input[type="number"] {
   flex: 1;
   min-width: 0;
-  padding: 8px 12px;
+  padding: 8px 10px;
   border: 1.5px solid var(--border);
   border-radius: 8px;
   font-size: 0.875rem;
   outline: none;
   transition: border-color 0.2s;
 }
-
 .add-item-row input:focus { border-color: var(--orange); }
 
-.pantry-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.add-item-row input[type="number"] { max-width: 80px; }
+
+.unit-select {
+  padding: 8px 6px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  outline: none;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  max-width: 72px;
 }
+.unit-select:focus { border-color: var(--orange); }
+
+.pantry-grid { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .pantry-item {
   display: flex;
@@ -262,18 +303,14 @@ header .subtitle {
   transition: all 0.2s;
   user-select: none;
 }
-
 .pantry-item:hover { border-color: var(--orange); }
-
 .pantry-item.checked {
   background: var(--green-pale);
   border-color: var(--green);
   color: #2E7D32;
   font-weight: 500;
 }
-
 .pantry-item .check-icon { font-size: 0.75rem; }
-
 .pantry-item .delete-btn {
   background: none;
   border: none;
@@ -285,8 +322,47 @@ header .subtitle {
   opacity: 0;
   transition: opacity 0.2s;
 }
-
 .pantry-item:hover .delete-btn { opacity: 1; }
+
+/* ===== Servings Row ===== */
+.servings-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.servings-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid var(--orange);
+  background: white;
+  color: var(--orange);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.servings-btn:hover { background: var(--orange); color: white; }
+
+.servings-row input[type="number"] {
+  width: 52px;
+  text-align: center;
+  padding: 6px 4px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  outline: none;
+}
+.servings-row input[type="number"]:focus { border-color: var(--orange); }
+
+.servings-label { font-size: 0.8rem; color: var(--gray); }
 
 /* ===== Recommend ===== */
 .recommend-card {
@@ -299,9 +375,7 @@ header .subtitle {
   transition: transform 0.15s, box-shadow 0.15s;
   border-left: 4px solid transparent;
 }
-
 .recommend-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
-
 .recommend-card.can-cook { border-left-color: var(--green); background: var(--green-pale); }
 .recommend-card.almost { border-left-color: var(--yellow); background: var(--yellow-pale); }
 
@@ -311,7 +385,6 @@ header .subtitle {
   justify-content: space-between;
   margin-bottom: 6px;
 }
-
 .recommend-card .dish-name { font-size: 1rem; font-weight: 600; }
 
 .status-badge {
@@ -320,7 +393,6 @@ header .subtitle {
   padding: 3px 10px;
   border-radius: 20px;
 }
-
 .status-badge.can-cook { background: var(--green); color: white; }
 .status-badge.almost { background: var(--yellow); color: white; }
 
@@ -354,7 +426,6 @@ header .subtitle {
   justify-content: center;
   padding: 16px;
 }
-
 .modal-overlay.hidden { display: none; }
 
 .modal {
@@ -375,7 +446,6 @@ header .subtitle {
   padding: 16px 20px;
   border-bottom: 1px solid var(--border);
 }
-
 .modal-header h3 { font-size: 1.1rem; font-weight: 600; }
 
 .modal-close {
@@ -390,24 +460,26 @@ header .subtitle {
 .modal-close:hover { background: var(--gray-light); }
 
 .modal-body {
-  padding: 16px 20px;
+  padding: 14px 20px;
   overflow-y: auto;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .modal-body label {
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 700;
   color: var(--gray);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-top: 4px;
 }
 
-.modal-body input, .modal-body select {
+.modal-body input[type="text"],
+.modal-body input[type="number"],
+.modal-body select:not(.unit-select) {
   padding: 9px 12px;
   border: 1.5px solid var(--border);
   border-radius: 8px;
@@ -416,10 +488,57 @@ header .subtitle {
   transition: border-color 0.2s;
   width: 100%;
 }
-
 .modal-body input:focus, .modal-body select:focus { border-color: var(--orange); }
 
-.item-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 4px; }
+/* Photo Upload */
+.photo-upload-area {
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  position: relative;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.photo-upload-area:hover { border-color: var(--orange); }
+
+.photo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px;
+  color: var(--gray);
+  font-size: 0.85rem;
+}
+.photo-placeholder span:first-child { font-size: 1.8rem; }
+
+.photo-preview {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  display: block;
+}
+.photo-preview.hidden { display: none; }
+
+.btn-remove-photo {
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  margin: 6px;
+  align-self: flex-end;
+}
+.btn-remove-photo.hidden { display: none; }
+
+/* Item List */
+.item-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 4px; min-height: 4px; }
 
 .item-row {
   display: flex;
@@ -430,9 +549,8 @@ header .subtitle {
   border-radius: 8px;
   font-size: 0.85rem;
 }
-
 .item-row .item-name { font-weight: 500; flex: 1; }
-.item-row .item-amount { color: var(--gray); font-size: 0.8rem; }
+.item-row .item-amount { color: var(--gray); font-size: 0.8rem; white-space: nowrap; }
 .item-row .remove-btn {
   background: none;
   border: none;
@@ -441,6 +559,7 @@ header .subtitle {
   font-size: 0.9rem;
   padding: 0 4px;
   line-height: 1;
+  flex-shrink: 0;
 }
 
 .modal-footer {
@@ -451,7 +570,16 @@ header .subtitle {
   justify-content: flex-end;
 }
 
-/* ===== Detail Modal ===== */
+/* Detail Modal */
+.detail-photo {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+.detail-photo.hidden { display: none; }
+
 .detail-section { margin-bottom: 14px; }
 .detail-section h4 {
   font-size: 0.8rem;
@@ -477,4 +605,6 @@ header .subtitle {
   header h1 { font-size: 1.3rem; }
   .tab-btn span { display: none; }
   .tab-btn { font-size: 1.3rem; padding: 10px; }
+  .add-item-row input[type="number"] { max-width: 60px; }
+  .unit-select { max-width: 60px; }
 }
