@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Richard & Cici's Menu</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>🍽️ Richard &amp; Cici's Menu</h1>
+    <p class="subtitle">家庭菜单 Family Recipe Book</p>
+  </header>
+
+  <!-- Tab Navigation -->
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="menu">
+      📖 <span>菜单 Menu</span>
+    </button>
+    <button class="tab-btn" data-tab="pantry">
+      🥦 <span>食材库 Pantry</span>
+    </button>
+    <button class="tab-btn" data-tab="recommend">
+      ✨ <span>今天做什么？</span>
+    </button>
+  </nav>
+
+  <!-- Tab: Menu -->
+  <section id="tab-menu" class="tab-content active">
+    <div class="section-header">
+      <h2>所有菜谱 All Recipes</h2>
+      <button class="btn-primary" id="btn-add-dish">+ 添加菜 Add Dish</button>
+    </div>
+    <div id="dish-list"></div>
+  </section>
+
+  <!-- Tab: Pantry -->
+  <section id="tab-pantry" class="tab-content">
+    <div class="pantry-section">
+      <h2>🥩 食材 Ingredients</h2>
+      <div class="add-item-row">
+        <input type="text" id="input-new-ingredient" placeholder="添加食材 Add ingredient..." />
+        <button class="btn-secondary" id="btn-add-ingredient">添加</button>
+      </div>
+      <div id="pantry-ingredients" class="pantry-grid"></div>
+    </div>
+
+    <div class="pantry-section">
+      <h2>🧂 调味料 Seasonings</h2>
+      <div class="add-item-row">
+        <input type="text" id="input-new-seasoning" placeholder="添加调味料 Add seasoning..." />
+        <button class="btn-secondary" id="btn-add-seasoning">添加</button>
+      </div>
+      <div id="pantry-seasonings" class="pantry-grid"></div>
+    </div>
+  </section>
+
+  <!-- Tab: Recommend -->
+  <section id="tab-recommend" class="tab-content">
+    <div class="section-header">
+      <h2>今天做什么？ What to Cook?</h2>
+      <p class="hint">根据你的食材库推荐 Based on your pantry</p>
+    </div>
+    <div id="recommend-list"></div>
+  </section>
+
+  <!-- Modal: Add/Edit Dish -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-title">添加菜 Add Dish</h3>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <label>菜名 Dish Name *</label>
+        <input type="text" id="dish-name" placeholder="例：红烧肉" />
+
+        <label>分类 Category</label>
+        <select id="dish-category">
+          <option value="主菜">主菜 Main Dish</option>
+          <option value="汤">汤 Soup</option>
+          <option value="小菜">小菜 Side Dish</option>
+          <option value="主食">主食 Staple</option>
+          <option value="甜点">甜点 Dessert</option>
+        </select>
+
+        <label>食材 Ingredients</label>
+        <div id="ingredients-list" class="item-list"></div>
+        <div class="add-item-row">
+          <input type="text" id="input-ingredient-name" placeholder="食材名 Name" />
+          <input type="text" id="input-ingredient-amount" placeholder="用量 Amount" />
+          <button class="btn-secondary" id="btn-add-ingredient-item">+ 添加</button>
+        </div>
+
+        <label>调味料 Seasonings</label>
+        <div id="seasonings-list" class="item-list"></div>
+        <div class="add-item-row">
+          <input type="text" id="input-seasoning-name" placeholder="调味料名 Name" />
+          <input type="text" id="input-seasoning-amount" placeholder="用量 Amount" />
+          <button class="btn-secondary" id="btn-add-seasoning-item">+ 添加</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" id="btn-cancel">取消 Cancel</button>
+        <button class="btn-primary" id="btn-save-dish">保存 Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: View Dish Detail -->
+  <div id="modal-detail-overlay" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="detail-title"></h3>
+        <button class="modal-close" id="detail-close">✕</button>
+      </div>
+      <div class="modal-body" id="detail-body"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
