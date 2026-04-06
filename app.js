@@ -1,11 +1,11 @@
 // ===== Firebase Config (replace REPLACE_ME values with your Firebase project config) =====
 const firebaseConfig = {
-  apiKey: "REPLACE_ME",
-  authDomain: "REPLACE_ME",
-  projectId: "REPLACE_ME",
-  storageBucket: "REPLACE_ME",
-  messagingSenderId: "REPLACE_ME",
-  appId: "REPLACE_ME"
+  apiKey: "AIzaSyDv3w4UzW4kVNaFuFSinQC8CHa4xyUpClo",
+  authDomain: "rnc-menu.firebaseapp.com",
+  projectId: "rnc-menu",
+  storageBucket: "rnc-menu.firebasestorage.app",
+  messagingSenderId: "690457296098",
+  appId: "1:690457296098:web:1442a9e0abb03cfb0b32bb"
 };
 
 let db = null;
