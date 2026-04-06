@@ -423,17 +423,19 @@ function unitSelectHtml(selectedUnit) {
 function editableItemRowHtml(type, item, i) {
   const isAdaptive = item.unit === '适量';
   return `
-    <div class="item-row item-row-edit">
-      <input type="text" class="edit-name" value="${escHtml(item.name)}"
+    <div class="ing-edit-row">
+      <input type="text" class="ing-edit-name" value="${escHtml(item.name)}"
         placeholder="名称" oninput="updateModalItem('${type}',${i},'name',this.value)" />
-      <input type="number" class="edit-value" value="${isAdaptive || item.value === null ? '' : item.value}"
-        placeholder="用量" min="0" step="any" ${isAdaptive ? 'disabled' : ''}
-        oninput="updateModalItem('${type}',${i},'value',this.value)" />
-      <select class="unit-select edit-unit" style="max-width:60px"
-        onchange="updateModalItem('${type}',${i},'unit',this.value)">
-        ${UNIT_OPTIONS.map(u => `<option value="${u}"${u === item.unit ? ' selected' : ''}>${u}</option>`).join('')}
-      </select>
-      <button class="remove-btn" onclick="removeModalItem('${type}',${i})">✕</button>
+      <div class="ing-edit-bottom">
+        <input type="number" class="ing-edit-value" value="${isAdaptive || item.value === null ? '' : item.value}"
+          placeholder="用量" min="0" step="any" inputmode="decimal" ${isAdaptive ? 'disabled' : ''}
+          oninput="updateModalItem('${type}',${i},'value',this.value)" />
+        <select class="ing-edit-unit"
+          onchange="updateModalItem('${type}',${i},'unit',this.value)">
+          ${UNIT_OPTIONS.map(u => `<option value="${u}"${u === item.unit ? ' selected' : ''}>${u}</option>`).join('')}
+        </select>
+        <button class="remove-btn" onclick="removeModalItem('${type}',${i})">✕</button>
+      </div>
     </div>`;
 }
 
@@ -491,9 +493,9 @@ function renderModalSpices() {
 function renderModalSteps() {
   const list = document.getElementById('steps-list');
   list.innerHTML = modalSteps.map((s, i) => `
-    <div class="item-row item-row-edit">
-      <span class="step-order" style="flex-shrink:0">${i + 1}</span>
-      <input type="text" class="edit-name" value="${escHtml(s.text)}" placeholder="步骤说明"
+    <div class="step-edit-row">
+      <span class="step-order">${i + 1}</span>
+      <input type="text" class="step-edit-input" value="${escHtml(s.text)}" placeholder="步骤说明"
         oninput="updateModalStep(${i}, this.value)" />
       <button class="remove-btn" onclick="removeModalStep(${i})">✕</button>
     </div>`).join('') || '<div style="color:#999;font-size:0.8rem;padding:2px 0;">暂无步骤</div>';

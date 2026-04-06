@@ -434,6 +434,7 @@ header .subtitle { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
   width: 100%;
   max-width: 500px;
   max-height: 90vh;
+  max-height: 90dvh; /* dynamic viewport height — fixes iOS Safari address bar */
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -461,12 +462,14 @@ header .subtitle { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
 
 .modal-body {
   padding: 14px 20px;
-  overflow-y: auto;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
   overflow-x: hidden;
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .modal-body label {
@@ -539,7 +542,7 @@ header .subtitle { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
 .btn-remove-photo.hidden { display: none; }
 
 /* Item List */
-.item-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 4px; min-height: 4px; }
+.item-list { display: flex; flex-direction: column; gap: 7px; margin-bottom: 8px; min-height: 0; }
 
 .item-row {
   display: flex;
@@ -553,35 +556,89 @@ header .subtitle { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
 .item-row .item-name { font-weight: 500; flex: 1; }
 .item-row .item-amount { color: var(--gray); font-size: 0.8rem; white-space: nowrap; }
 
-/* Editable item rows */
-.item-row-edit { align-items: center; gap: 5px; padding: 5px 8px; }
-.modal-body .item-row-edit .edit-name {
+/* ===== Ingredient / Spice editable rows (two-line layout) ===== */
+.ing-edit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px;
+  background: var(--gray-light);
+  border-radius: 10px;
+}
+
+.ing-edit-name {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  font-size: 0.9rem;
+  outline: none;
+  background: white;
+  -webkit-appearance: none;
+  transition: border-color 0.2s;
+}
+.ing-edit-name:focus { border-color: var(--orange); }
+
+.ing-edit-bottom {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.ing-edit-value {
   flex: 1;
   min-width: 0;
-  width: auto;
-  padding: 4px 7px;
+  padding: 8px 10px;
   border: 1.5px solid var(--border);
-  border-radius: 6px;
-  font-size: 0.82rem;
+  border-radius: 7px;
+  font-size: 0.9rem;
   outline: none;
-  transition: border-color 0.2s;
   background: white;
-}
-.modal-body .item-row-edit .edit-name:focus { border-color: var(--orange); }
-.modal-body .item-row-edit .edit-value {
-  width: 60px;
-  flex-shrink: 0;
-  padding: 4px 6px;
-  border: 1.5px solid var(--border);
-  border-radius: 6px;
-  font-size: 0.82rem;
-  outline: none;
-  transition: border-color 0.2s;
   text-align: right;
+  -webkit-appearance: none;
+  transition: border-color 0.2s;
 }
-.modal-body .item-row-edit .edit-value:focus { border-color: var(--orange); }
-.modal-body .item-row-edit .edit-value:disabled { background: var(--gray-light); color: var(--gray); }
-.item-row-edit .edit-unit { max-width: 58px; font-size: 0.78rem; padding: 4px 4px; }
+.ing-edit-value:focus { border-color: var(--orange); }
+.ing-edit-value:disabled { background: #eee; color: var(--gray); }
+
+.ing-edit-unit {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 6px;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  font-size: 0.9rem;
+  outline: none;
+  background: white;
+  -webkit-appearance: auto;
+  appearance: auto;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.ing-edit-unit:focus { border-color: var(--orange); }
+
+/* ===== Step editable rows (single-line) ===== */
+.step-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--gray-light);
+  border-radius: 10px;
+}
+.step-edit-input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  font-size: 0.9rem;
+  outline: none;
+  background: white;
+  -webkit-appearance: none;
+  transition: border-color 0.2s;
+}
+.step-edit-input:focus { border-color: var(--orange); }
 
 .item-row .remove-btn {
   background: none;
