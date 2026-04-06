@@ -25,13 +25,22 @@
     <button class="tab-btn" data-tab="recommend">
       ✨ <span>今天做什么？</span>
     </button>
+    <button class="tab-btn" data-tab="shopping">
+      🛒 <span>购物清单</span>
+    </button>
   </nav>
 
   <!-- Tab: Menu -->
   <section id="tab-menu" class="tab-content active">
     <div class="section-header">
       <h2>所有菜谱 All Recipes</h2>
-      <button class="btn-primary" id="btn-add-dish">+ 添加菜</button>
+      <div class="header-actions">
+        <button class="btn-primary" id="btn-add-dish">+ 添加菜</button>
+        <button class="btn-secondary" id="btn-export-menu">📋 导出菜单</button>
+      </div>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="dish-search" placeholder="🔍 搜索菜名、食材…" oninput="onSearchInput()" />
     </div>
     <div class="group-toggle">
       <button class="toggle-btn active" id="btn-group-ingredient" data-group="ingredient">🥩 按主食材</button>
@@ -70,6 +79,16 @@
     <div id="recommend-list"></div>
   </section>
 
+  <!-- Tab: Shopping List -->
+  <section id="tab-shopping" class="tab-content">
+    <div class="section-header">
+      <h2>🛒 购物清单 Shopping List</h2>
+      <button class="btn-secondary" onclick="clearShoppingChecked()">清除已购</button>
+    </div>
+    <div id="shopping-dish-picker" class="shopping-picker"></div>
+    <div id="shopping-list-output"></div>
+  </section>
+
   <!-- Modal: Add/Edit Dish -->
   <div id="modal-overlay" class="modal-overlay hidden">
     <div class="modal">
@@ -102,8 +121,6 @@
           <option value="牛肉"></option>
           <option value="羊肉"></option>
           <option value="海鲜"></option>
-          <option value="鱼"></option>
-          <option value="虾"></option>
           <option value="蔬菜"></option>
           <option value="豆腐"></option>
           <option value="蛋类"></option>
@@ -179,6 +196,59 @@
           <button class="btn-secondary" id="btn-add-seasoning-item">+ 加</button>
         </div>
 
+        <label>🌶️ 关键香料 Key Spices</label>
+        <div id="key-spices-list" class="item-list"></div>
+        <div class="add-item-row">
+          <input type="text" id="input-key-spice-name" placeholder="香料名 Name" />
+          <input type="number" id="input-key-spice-value" placeholder="用量" min="0" step="any" />
+          <select id="input-key-spice-unit" class="unit-select">
+            <option value="g">g</option>
+            <option value="kg">kg</option>
+            <option value="ml">ml</option>
+            <option value="L">L</option>
+            <option value="tbsp">tbsp</option>
+            <option value="tsp">tsp</option>
+            <option value="勺">勺</option>
+            <option value="cup">cup</option>
+            <option value="个">个</option>
+            <option value="片">片</option>
+            <option value="oz">oz</option>
+            <option value="lb">lb</option>
+            <option value="适量">适量</option>
+          </select>
+          <button class="btn-secondary" id="btn-add-key-spice">+ 加</button>
+        </div>
+
+        <label>🌿 辅助香料 Aux Spices</label>
+        <div id="aux-spices-list" class="item-list"></div>
+        <div class="add-item-row">
+          <input type="text" id="input-aux-spice-name" placeholder="香料名 Name" />
+          <input type="number" id="input-aux-spice-value" placeholder="用量" min="0" step="any" />
+          <select id="input-aux-spice-unit" class="unit-select">
+            <option value="g">g</option>
+            <option value="kg">kg</option>
+            <option value="ml">ml</option>
+            <option value="L">L</option>
+            <option value="tbsp">tbsp</option>
+            <option value="tsp">tsp</option>
+            <option value="勺">勺</option>
+            <option value="cup">cup</option>
+            <option value="个">个</option>
+            <option value="片">片</option>
+            <option value="oz">oz</option>
+            <option value="lb">lb</option>
+            <option value="适量">适量</option>
+          </select>
+          <button class="btn-secondary" id="btn-add-aux-spice">+ 加</button>
+        </div>
+
+        <label>烹饪步骤 Steps</label>
+        <div id="steps-list" class="item-list"></div>
+        <div class="add-item-row">
+          <input type="text" id="input-step-text" placeholder="步骤说明，例：大火翻炒3分钟" style="flex:1" />
+          <button class="btn-secondary" id="btn-add-step">+ 加</button>
+        </div>
+
       </div>
       <div class="modal-footer">
         <button class="btn-ghost" id="btn-cancel">取消 Cancel</button>
@@ -204,6 +274,30 @@
           <span class="servings-label">人份</span>
         </div>
         <div id="detail-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Export Menu -->
+  <div id="modal-export-overlay" class="modal-overlay hidden">
+    <div class="modal" style="max-width:460px">
+      <div class="modal-header">
+        <h3>📋 导出菜单</h3>
+        <button class="modal-close" id="export-modal-close">✕</button>
+      </div>
+      <div class="modal-body" style="gap:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:0.8rem;color:#666">选择要放入菜单的菜</span>
+          <div style="display:flex;gap:8px">
+            <button class="btn-ghost" style="font-size:0.75rem;padding:4px 10px" onclick="exportSelectAll(true)">全选</button>
+            <button class="btn-ghost" style="font-size:0.75rem;padding:4px 10px" onclick="exportSelectAll(false)">清空</button>
+          </div>
+        </div>
+        <div id="export-dish-list"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" id="export-cancel">取消</button>
+        <button class="btn-primary" id="export-generate">生成菜单 →</button>
       </div>
     </div>
   </div>
