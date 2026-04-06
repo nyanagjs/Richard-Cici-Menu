@@ -797,11 +797,63 @@ header .subtitle { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
   accent-color: var(--orange);
 }
 
+/* ===== View Mode ===== */
+.view-banner {
+  background: #1a1a1a;
+  color: white;
+  text-align: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  padding: 7px 16px;
+}
+.view-banner.hidden { display: none; }
+
+body.view-mode [data-tab="pantry"],
+body.view-mode [data-tab="shopping"] { display: none; }
+
+body.view-mode .dish-actions .btn-icon:not([title="查看"]) { display: none; }
+
+body.view-mode #btn-add-dish,
+body.view-mode #btn-export-menu { display: none; }
+
+/* ===== QR Button ===== */
+header { position: relative; }
+
+.btn-qr {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.18);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.45);
+  border-radius: 8px;
+  padding: 6px 11px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.btn-qr:hover { background: rgba(255,255,255,0.3); }
+
+/* Hide QR button in view mode (guests don't need to share the QR further) */
+body.view-mode .btn-qr { display: none; }
+
 /* ===== Responsive ===== */
 @media (max-width: 480px) {
   header h1 { font-size: 1.3rem; }
   .tab-btn span { display: none; }
   .tab-btn { font-size: 1.3rem; padding: 10px; }
-  .add-item-row input[type="number"] { max-width: 60px; }
-  .unit-select { max-width: 60px; }
+
+  /* Stack add-item-row: text input on first row, qty+unit+btn on second */
+  .add-item-row {
+    display: grid;
+    grid-template-columns: 1fr 58px 58px auto;
+    row-gap: 6px;
+  }
+  .add-item-row input[type="text"] {
+    grid-column: 1 / -1;
+  }
+  .add-item-row input[type="number"] { max-width: none; }
+  .unit-select { max-width: none; }
 }

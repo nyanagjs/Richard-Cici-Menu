@@ -1,3 +1,39 @@
+// ===== Firebase Config (replace REPLACE_ME values with your Firebase project config) =====
+const firebaseConfig = {
+  apiKey: "REPLACE_ME",
+  authDomain: "REPLACE_ME",
+  projectId: "REPLACE_ME",
+  storageBucket: "REPLACE_ME",
+  messagingSenderId: "REPLACE_ME",
+  appId: "REPLACE_ME"
+};
+
+let db = null;
+try {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+} catch (e) {
+  // Firebase not available (e.g. file:// without SDK) — falls back to localStorage only
+}
+
+function saveDishToFirestore(dish) {
+  if (!db || dish === undefined) return;
+  db.collection('dishes').doc(dish.id).set(dish).catch(() => {});
+}
+
+function deleteDishFromFirestore(id) {
+  if (!db) return;
+  db.collection('dishes').doc(id).delete().catch(() => {});
+}
+
+function savePantryToFirestore() {
+  if (!db) return;
+  db.collection('app_data').doc('pantry').set({
+    ingredients: pantryIngredients,
+    seasonings: pantrySeasonings,
+  }).catch(() => {});
+}
+
 // ===== Storage Helpers =====
 const KEYS = {
   dishes: 'rcm_dishes',
@@ -125,10 +161,20 @@ let modalAuxSpices = [];
 let modalPhoto = null;
 let modalSteps = [];
 
+// ===== View Mode =====
+const IS_VIEW_MODE = new URLSearchParams(window.location.search).has('view');
+let currentTab = 'menu';
+
+if (IS_VIEW_MODE) {
+  document.body.classList.add('view-mode');
+  document.getElementById('view-mode-banner').classList.remove('hidden');
+}
+
 // ===== Tab Navigation =====
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const tab = btn.dataset.tab;
+    currentTab = tab;
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(s => s.classList.remove('active'));
     btn.classList.add('active');
@@ -569,14 +615,20 @@ document.getElementById('btn-save-dish').addEventListener('click', () => {
     steps: modalSteps,
   };
 
+  let savedDish;
   if (editingDishId) {
     const idx = dishes.findIndex(d => d.id === editingDishId);
-    if (idx !== -1) dishes[idx] = { ...dishes[idx], ...dishData };
+    if (idx !== -1) {
+      dishes[idx] = { ...dishes[idx], ...dishData };
+      savedDish = dishes[idx];
+    }
   } else {
-    dishes.push({ id: uid(), ...dishData });
+    savedDish = { id: uid(), ...dishData };
+    dishes.push(savedDish);
   }
 
   save(KEYS.dishes, dishes);
+  if (savedDish) saveDishToFirestore(savedDish);
   closeModal();
   renderDishes();
 });
@@ -593,6 +645,7 @@ function deleteDish(id) {
   if (!confirm(`确认删除「${dish.name}」？`)) return;
   dishes = dishes.filter(d => d.id !== id);
   save(KEYS.dishes, dishes);
+  deleteDishFromFirestore(id);
   renderDishes();
 }
 
@@ -744,6 +797,7 @@ function togglePantryItem(storageKey, index) {
   const arr = storageKey === KEYS.pantryIngredients ? pantryIngredients : pantrySeasonings;
   arr[index].checked = !arr[index].checked;
   save(storageKey, arr);
+  savePantryToFirestore();
   renderPantry();
 }
 
@@ -756,6 +810,7 @@ function deletePantryItem(event, storageKey, index) {
     pantrySeasonings.splice(index, 1);
     save(KEYS.pantrySeasonings, pantrySeasonings);
   }
+  savePantryToFirestore();
   renderPantry();
 }
 
@@ -771,6 +826,7 @@ function addPantryItem(inputId, storageKey) {
   }
   arr.push({ name, checked: true });
   save(storageKey, arr);
+  savePantryToFirestore();
   input.value = '';
   renderPantry();
 }
@@ -1261,6 +1317,44 @@ function escHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
+// ===== QR Code =====
+function showQrModal() {
+  const viewUrl = window.location.origin + window.location.pathname + '?view=1';
+  const container = document.getElementById('qr-code-container');
+  container.innerHTML = '';
+  new QRCode(container, {
+    text: viewUrl,
+    width: 200,
+    height: 200,
+    colorDark: '#1a1a1a',
+    colorLight: '#ffffff',
+  });
+  document.getElementById('modal-qr-overlay').classList.remove('hidden');
+}
+
 // ===== Init =====
 renderDishes();
 renderPantry();
+
+// ===== Firestore Real-time Listeners =====
+if (db) {
+  db.collection('dishes').onSnapshot(snapshot => {
+    const firestoreDishes = migrateDishes(snapshot.docs.map(doc => doc.data()));
+    // Merge: Firestore is source of truth; also update localStorage cache
+    dishes = firestoreDishes;
+    save(KEYS.dishes, dishes);
+    renderDishes();
+    if (currentTab === 'recommend') renderRecommend();
+    if (currentTab === 'shopping') renderShopping();
+  }, () => { /* ignore errors (offline) */ });
+
+  db.collection('app_data').doc('pantry').onSnapshot(doc => {
+    if (doc.exists) {
+      pantryIngredients = doc.data().ingredients || [];
+      pantrySeasonings = doc.data().seasonings || [];
+      save(KEYS.pantryIngredients, pantryIngredients);
+      save(KEYS.pantrySeasonings, pantrySeasonings);
+      renderPantry();
+    }
+  }, () => { /* ignore errors (offline) */ });
+}

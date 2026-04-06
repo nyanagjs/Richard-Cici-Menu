@@ -12,7 +12,11 @@
   <header>
     <h1>🍽️ Richard &amp; Cici's Menu</h1>
     <p class="subtitle">家庭菜单 Family Recipe Book</p>
+    <button class="btn-qr" id="btn-show-qr" onclick="showQrModal()">📱 二维码</button>
   </header>
+
+  <!-- View Mode Banner -->
+  <div id="view-mode-banner" class="view-banner hidden">👁️ 浏览模式 · View Only</div>
 
   <!-- Tab Navigation -->
   <nav class="tabs">
@@ -302,6 +306,26 @@
     </div>
   </div>
 
+  <!-- Modal: QR Code -->
+  <div id="modal-qr-overlay" class="modal-overlay hidden">
+    <div class="modal" style="max-width:300px;text-align:center">
+      <div class="modal-header" style="justify-content:center;position:relative">
+        <h3>扫码查看菜单</h3>
+        <button class="modal-close" style="position:absolute;right:12px"
+          onclick="document.getElementById('modal-qr-overlay').classList.add('hidden')">✕</button>
+      </div>
+      <div class="modal-body" style="align-items:center;gap:14px;padding:20px">
+        <div id="qr-code-container"></div>
+        <p style="font-size:0.78rem;color:#666;line-height:1.5">客人扫码可浏览菜单<br>仅限查看，无法编辑</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <!-- QR Code generator -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
