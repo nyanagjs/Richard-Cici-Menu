@@ -34,6 +34,10 @@ function savePantryToFirestore() {
   }).catch(() => {});
 }
 
+// ===== Vision Worker URL =====
+// After creating your Cloudflare Worker, replace the placeholder below with your Worker URL.
+const VISION_WORKER_URL = 'https://rnc-menu-vision.nyanagjs.workers.dev';
+
 // ===== Storage Helpers =====
 const KEYS = {
   dishes: 'rcm_dishes',
@@ -320,6 +324,7 @@ photoInput.addEventListener('change', async () => {
   photoPreview.classList.remove('hidden');
   photoPlaceholder.style.display = 'none';
   btnRemovePhoto.classList.remove('hidden');
+  document.getElementById('btn-recognize').classList.remove('hidden');
   photoInput.value = '';
 });
 
@@ -330,6 +335,8 @@ btnRemovePhoto.addEventListener('click', e => {
   photoPreview.classList.add('hidden');
   photoPlaceholder.style.display = '';
   btnRemovePhoto.classList.add('hidden');
+  document.getElementById('btn-recognize').classList.add('hidden');
+  document.getElementById('recognize-loading').classList.add('hidden');
 });
 
 function compressImage(file) {
@@ -348,6 +355,85 @@ function compressImage(file) {
     };
     img.src = url;
   });
+}
+
+// ===== AI Dish Recognition =====
+async function recognizeDish() {
+  if (!modalPhoto) return;
+  if (!VISION_WORKER_URL || VISION_WORKER_URL === 'YOUR_WORKER_URL') {
+    alert('请先在 app.js 中设置 VISION_WORKER_URL（Cloudflare Worker 地址）');
+    return;
+  }
+
+  const btn = document.getElementById('btn-recognize');
+  const loading = document.getElementById('recognize-loading');
+  btn.classList.add('hidden');
+  loading.classList.remove('hidden');
+
+  try {
+    const [header, base64Data] = modalPhoto.split(',');
+    const mediaType = header.match(/data:([^;]+)/)[1];
+
+    const resp = await fetch(VISION_WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageBase64: base64Data, mediaType }),
+    });
+
+    if (!resp.ok) throw new Error(`服务器错误 ${resp.status}`);
+
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error.message || '识别失败');
+
+    const rawText = data.content?.[0]?.text || '';
+    const jsonMatch = rawText.match(/```json\s*([\s\S]*?)```/) || rawText.match(/(\{[\s\S]*\})/);
+    if (!jsonMatch) throw new Error('无法解析识别结果，请重试');
+
+    const result = JSON.parse(jsonMatch[1]);
+
+    // Fill name only if currently empty
+    const nameEl = document.getElementById('dish-name');
+    if (result.name && !nameEl.value.trim()) {
+      nameEl.value = result.name;
+    }
+
+    // Set main ingredient if the value matches a valid option
+    if (result.mainIngredient) {
+      const sel = document.getElementById('dish-main-ingredient');
+      const matched = [...sel.options].find(o => o.value === result.mainIngredient);
+      if (matched) sel.value = result.mainIngredient;
+    }
+
+    // Append ingredients (don't clear existing)
+    if (Array.isArray(result.ingredients) && result.ingredients.length) {
+      result.ingredients.forEach(item => {
+        if (item.name) modalIngredients.push({
+          name: item.name,
+          value: item.value ?? null,
+          unit: item.unit || 'g',
+        });
+      });
+      renderModalItems();
+    }
+
+    // Append seasonings
+    if (Array.isArray(result.seasonings) && result.seasonings.length) {
+      result.seasonings.forEach(item => {
+        if (item.name) modalSeasonings.push({
+          name: item.name,
+          value: item.value ?? null,
+          unit: item.unit || '适量',
+        });
+      });
+      renderModalItems();
+    }
+
+  } catch (e) {
+    alert('识别失败：' + e.message);
+  } finally {
+    loading.classList.add('hidden');
+    btn.classList.remove('hidden');
+  }
 }
 
 // ===== Add/Edit Dish Modal =====
@@ -389,12 +475,15 @@ function openModal(dish = null) {
     photoPreview.classList.remove('hidden');
     photoPlaceholder.style.display = 'none';
     btnRemovePhoto.classList.remove('hidden');
+    document.getElementById('btn-recognize').classList.remove('hidden');
   } else {
     photoPreview.src = '';
     photoPreview.classList.add('hidden');
     photoPlaceholder.style.display = '';
     btnRemovePhoto.classList.add('hidden');
+    document.getElementById('btn-recognize').classList.add('hidden');
   }
+  document.getElementById('recognize-loading').classList.add('hidden');
 
   // Clear add-item inputs
   ['input-ingredient-name', 'input-ingredient-value', 'input-seasoning-name', 'input-seasoning-value', 'input-key-spice-name', 'input-key-spice-value', 'input-aux-spice-name', 'input-aux-spice-value', 'input-step-text'].forEach(id => {

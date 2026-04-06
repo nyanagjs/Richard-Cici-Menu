@@ -568,6 +568,46 @@ header .subtitle { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
 }
 .btn-remove-photo.hidden { display: none; }
 
+.btn-recognize {
+  background: var(--orange);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 6px auto 0;
+  align-self: center;
+  transition: background 0.15s;
+}
+.btn-recognize:hover { background: var(--orange-light); }
+.btn-recognize:active { opacity: 0.85; }
+.btn-recognize.hidden { display: none; }
+
+.recognize-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 0.82rem;
+  color: var(--orange);
+  font-weight: 500;
+  margin: 6px 0;
+}
+.recognize-loading.hidden { display: none; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--orange-light);
+  border-top-color: var(--orange);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
 /* ===== Modal Sections (ingredient / seasoning / spice / steps cards) ===== */
 .modal-section {
   display: flex;
