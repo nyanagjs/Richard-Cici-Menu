@@ -32,8 +32,22 @@ body {
 header {
   background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
   color: white;
+  padding: 20px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-center {
   text-align: center;
-  padding: 24px 16px 20px;
+  width: 100%;
+}
+
+.header-bottom-row {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }
 
 header h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: 0.5px; }
@@ -967,17 +981,7 @@ body.view-mode #btn-add-dish,
 body.view-mode #btn-export-menu { display: none; }
 
 /* ===== QR Button ===== */
-header {
-  position: relative;
-  /* Reserve right side so title never slides under the QR button */
-  padding-right: 90px;
-}
-
 .btn-qr {
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
   background: rgba(255,255,255,0.18);
   color: white;
   border: 1px solid rgba(255,255,255,0.45);
