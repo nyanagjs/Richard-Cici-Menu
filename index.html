@@ -150,107 +150,117 @@
           <span class="servings-label">人份 people</span>
         </div>
 
-        <label>食材 Ingredients</label>
-        <div id="ingredients-list" class="item-list"></div>
-        <div class="add-item-row">
-          <input type="text" id="input-ingredient-name" placeholder="食材名 Name" />
-          <input type="number" id="input-ingredient-value" placeholder="用量" min="0" step="any" />
-          <select id="input-ingredient-unit" class="unit-select">
-            <option value="g">g</option>
-            <option value="kg">kg</option>
-            <option value="ml">ml</option>
-            <option value="L">L</option>
-            <option value="tbsp">tbsp</option>
-            <option value="tsp">tsp</option>
-            <option value="勺">勺</option>
-            <option value="cup">cup</option>
-            <option value="个">个</option>
-            <option value="只">只</option>
-            <option value="片">片</option>
-            <option value="颗">颗</option>
-            <option value="条">条</option>
-            <option value="块">块</option>
-            <option value="oz">oz</option>
-            <option value="lb">lb</option>
-            <option value="适量">适量</option>
-          </select>
-          <button class="btn-secondary" id="btn-add-ingredient-item">+ 加</button>
+        <div class="modal-section">
+          <div class="modal-section-title">食材 Ingredients</div>
+          <div id="ingredients-list" class="item-list"></div>
+          <div class="modal-add-row">
+            <input type="text" id="input-ingredient-name" placeholder="食材名 Name" />
+            <input type="number" id="input-ingredient-value" placeholder="用量" min="0" step="any" inputmode="decimal" />
+            <select id="input-ingredient-unit">
+              <option value="g">g</option>
+              <option value="kg">kg</option>
+              <option value="ml">ml</option>
+              <option value="L">L</option>
+              <option value="tbsp">tbsp</option>
+              <option value="tsp">tsp</option>
+              <option value="勺">勺</option>
+              <option value="cup">cup</option>
+              <option value="个">个</option>
+              <option value="只">只</option>
+              <option value="片">片</option>
+              <option value="颗">颗</option>
+              <option value="条">条</option>
+              <option value="块">块</option>
+              <option value="oz">oz</option>
+              <option value="lb">lb</option>
+              <option value="适量">适量</option>
+            </select>
+            <button class="btn-secondary" id="btn-add-ingredient-item">+ 加</button>
+          </div>
         </div>
 
-        <label>调味料 Seasonings</label>
-        <div id="seasonings-list" class="item-list"></div>
-        <div class="add-item-row">
-          <input type="text" id="input-seasoning-name" placeholder="调味料名 Name" />
-          <input type="number" id="input-seasoning-value" placeholder="用量" min="0" step="any" />
-          <select id="input-seasoning-unit" class="unit-select">
-            <option value="g">g</option>
-            <option value="kg">kg</option>
-            <option value="ml">ml</option>
-            <option value="L">L</option>
-            <option value="tbsp">tbsp</option>
-            <option value="tsp">tsp</option>
-            <option value="勺">勺</option>
-            <option value="cup">cup</option>
-            <option value="个">个</option>
-            <option value="片">片</option>
-            <option value="oz">oz</option>
-            <option value="lb">lb</option>
-            <option value="适量">适量</option>
-          </select>
-          <button class="btn-secondary" id="btn-add-seasoning-item">+ 加</button>
+        <div class="modal-section">
+          <div class="modal-section-title">调味料 Seasonings</div>
+          <div id="seasonings-list" class="item-list"></div>
+          <div class="modal-add-row">
+            <input type="text" id="input-seasoning-name" placeholder="调味料名 Name" />
+            <input type="number" id="input-seasoning-value" placeholder="用量" min="0" step="any" inputmode="decimal" />
+            <select id="input-seasoning-unit">
+              <option value="g">g</option>
+              <option value="kg">kg</option>
+              <option value="ml">ml</option>
+              <option value="L">L</option>
+              <option value="tbsp">tbsp</option>
+              <option value="tsp">tsp</option>
+              <option value="勺">勺</option>
+              <option value="cup">cup</option>
+              <option value="个">个</option>
+              <option value="片">片</option>
+              <option value="oz">oz</option>
+              <option value="lb">lb</option>
+              <option value="适量">适量</option>
+            </select>
+            <button class="btn-secondary" id="btn-add-seasoning-item">+ 加</button>
+          </div>
         </div>
 
-        <label>🌶️ 关键香料 Key Spices</label>
-        <div id="key-spices-list" class="item-list"></div>
-        <div class="add-item-row">
-          <input type="text" id="input-key-spice-name" placeholder="香料名 Name" />
-          <input type="number" id="input-key-spice-value" placeholder="用量" min="0" step="any" />
-          <select id="input-key-spice-unit" class="unit-select">
-            <option value="g">g</option>
-            <option value="kg">kg</option>
-            <option value="ml">ml</option>
-            <option value="L">L</option>
-            <option value="tbsp">tbsp</option>
-            <option value="tsp">tsp</option>
-            <option value="勺">勺</option>
-            <option value="cup">cup</option>
-            <option value="个">个</option>
-            <option value="片">片</option>
-            <option value="oz">oz</option>
-            <option value="lb">lb</option>
-            <option value="适量">适量</option>
-          </select>
-          <button class="btn-secondary" id="btn-add-key-spice">+ 加</button>
+        <div class="modal-section">
+          <div class="modal-section-title">🌶️ 关键香料 Key Spices</div>
+          <div id="key-spices-list" class="item-list"></div>
+          <div class="modal-add-row">
+            <input type="text" id="input-key-spice-name" placeholder="香料名 Name" />
+            <input type="number" id="input-key-spice-value" placeholder="用量" min="0" step="any" inputmode="decimal" />
+            <select id="input-key-spice-unit">
+              <option value="g">g</option>
+              <option value="kg">kg</option>
+              <option value="ml">ml</option>
+              <option value="L">L</option>
+              <option value="tbsp">tbsp</option>
+              <option value="tsp">tsp</option>
+              <option value="勺">勺</option>
+              <option value="cup">cup</option>
+              <option value="个">个</option>
+              <option value="片">片</option>
+              <option value="oz">oz</option>
+              <option value="lb">lb</option>
+              <option value="适量">适量</option>
+            </select>
+            <button class="btn-secondary" id="btn-add-key-spice">+ 加</button>
+          </div>
         </div>
 
-        <label>🌿 辅助香料 Aux Spices</label>
-        <div id="aux-spices-list" class="item-list"></div>
-        <div class="add-item-row">
-          <input type="text" id="input-aux-spice-name" placeholder="香料名 Name" />
-          <input type="number" id="input-aux-spice-value" placeholder="用量" min="0" step="any" />
-          <select id="input-aux-spice-unit" class="unit-select">
-            <option value="g">g</option>
-            <option value="kg">kg</option>
-            <option value="ml">ml</option>
-            <option value="L">L</option>
-            <option value="tbsp">tbsp</option>
-            <option value="tsp">tsp</option>
-            <option value="勺">勺</option>
-            <option value="cup">cup</option>
-            <option value="个">个</option>
-            <option value="片">片</option>
-            <option value="oz">oz</option>
-            <option value="lb">lb</option>
-            <option value="适量">适量</option>
-          </select>
-          <button class="btn-secondary" id="btn-add-aux-spice">+ 加</button>
+        <div class="modal-section">
+          <div class="modal-section-title">🌿 辅助香料 Aux Spices</div>
+          <div id="aux-spices-list" class="item-list"></div>
+          <div class="modal-add-row">
+            <input type="text" id="input-aux-spice-name" placeholder="香料名 Name" />
+            <input type="number" id="input-aux-spice-value" placeholder="用量" min="0" step="any" inputmode="decimal" />
+            <select id="input-aux-spice-unit">
+              <option value="g">g</option>
+              <option value="kg">kg</option>
+              <option value="ml">ml</option>
+              <option value="L">L</option>
+              <option value="tbsp">tbsp</option>
+              <option value="tsp">tsp</option>
+              <option value="勺">勺</option>
+              <option value="cup">cup</option>
+              <option value="个">个</option>
+              <option value="片">片</option>
+              <option value="oz">oz</option>
+              <option value="lb">lb</option>
+              <option value="适量">适量</option>
+            </select>
+            <button class="btn-secondary" id="btn-add-aux-spice">+ 加</button>
+          </div>
         </div>
 
-        <label>烹饪步骤 Steps</label>
-        <div id="steps-list" class="item-list"></div>
-        <div class="add-item-row">
-          <input type="text" id="input-step-text" placeholder="步骤说明，例：大火翻炒3分钟" style="flex:1" />
-          <button class="btn-secondary" id="btn-add-step">+ 加</button>
+        <div class="modal-section">
+          <div class="modal-section-title">烹饪步骤 Steps</div>
+          <div id="steps-list" class="item-list"></div>
+          <div class="modal-add-row">
+            <input type="text" id="input-step-text" placeholder="步骤说明，例：大火翻炒3分钟" />
+            <button class="btn-secondary" id="btn-add-step">+ 加</button>
+          </div>
         </div>
 
       </div>

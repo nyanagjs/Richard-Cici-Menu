@@ -481,9 +481,10 @@ header .subtitle { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
   margin-top: 4px;
 }
 
-.modal-body input[type="text"],
-.modal-body input[type="number"],
-.modal-body select:not(.unit-select) {
+/* Only direct-child inputs/selects of modal-body get full width (dish name, category, etc.) */
+.modal-body > input[type="text"],
+.modal-body > input[type="number"],
+.modal-body > select {
   padding: 9px 12px;
   border: 1.5px solid var(--border);
   border-radius: 8px;
@@ -492,7 +493,7 @@ header .subtitle { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
   transition: border-color 0.2s;
   width: 100%;
 }
-.modal-body input:focus, .modal-body select:focus { border-color: var(--orange); }
+.modal-body > input:focus, .modal-body > select:focus { border-color: var(--orange); }
 
 /* Photo Upload */
 .photo-upload-area {
@@ -541,8 +542,88 @@ header .subtitle { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
 }
 .btn-remove-photo.hidden { display: none; }
 
+/* ===== Modal Sections (ingredient / seasoning / spice / steps cards) ===== */
+.modal-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: white;
+}
+
+.modal-section-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Add-row inside modal sections */
+.modal-add-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.modal-add-row input[type="text"] {
+  flex: 1;
+  min-width: 100px;
+  padding: 8px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  outline: none;
+  background: white;
+  -webkit-appearance: none;
+  transition: border-color 0.2s;
+}
+.modal-add-row input[type="text"]:focus { border-color: var(--orange); }
+
+.modal-add-row input[type="number"] {
+  width: 68px;
+  flex-shrink: 0;
+  padding: 8px 6px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  text-align: center;
+  outline: none;
+  background: white;
+  -webkit-appearance: none;
+  transition: border-color 0.2s;
+}
+.modal-add-row input[type="number"]:focus { border-color: var(--orange); }
+
+.modal-add-row select {
+  width: 78px;
+  flex-shrink: 0;
+  padding: 8px 4px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  background: white;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: auto;
+  appearance: auto;
+  transition: border-color 0.2s;
+}
+.modal-add-row select:focus { border-color: var(--orange); }
+
+@media (max-width: 480px) {
+  .modal-add-row input[type="text"] {
+    width: 100%;
+    flex: none;
+    min-width: unset;
+  }
+}
+
 /* Item List */
-.item-list { display: flex; flex-direction: column; gap: 7px; margin-bottom: 8px; min-height: 0; }
+.item-list { display: flex; flex-direction: column; gap: 7px; min-height: 0; }
 
 .item-row {
   display: flex;
@@ -602,8 +683,8 @@ header .subtitle { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
 .ing-edit-value:disabled { background: #eee; color: var(--gray); }
 
 .ing-edit-unit {
-  flex: 1;
-  min-width: 0;
+  width: 82px;
+  flex-shrink: 0;
   padding: 8px 6px;
   border: 1.5px solid var(--border);
   border-radius: 7px;
