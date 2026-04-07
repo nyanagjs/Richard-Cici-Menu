@@ -244,7 +244,7 @@ function renderDishes() {
   }
 
   if (groupBy === 'ingredient') {
-    renderGrouped(container, filteredDishes, d => d.mainIngredient || '其他', '🥩 ');
+    renderGrouped(container, filteredDishes, d => d.mainIngredient || '其他', '');
   } else {
     const catLabels = {
       '主菜': '主菜 Main Dish', '汤': '汤 Soup',
