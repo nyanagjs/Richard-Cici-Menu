@@ -313,6 +313,7 @@ const btnRemovePhoto = document.getElementById('btn-remove-photo');
 
 photoUploadArea.addEventListener('click', e => {
   if (e.target === btnRemovePhoto) return;
+  if (e.target.id === 'btn-recognize') return;
   photoInput.click();
 });
 
