@@ -1018,8 +1018,7 @@ body.view-mode [data-tab="shopping"] { display: none; }
 
 body.view-mode .dish-actions .btn-icon:not([title="查看"]) { display: none; }
 
-body.view-mode #btn-add-dish,
-body.view-mode #btn-export-menu { display: none; }
+body.view-mode #btn-add-dish { display: none; }
 
 /* ===== QR Button ===== */
 .btn-qr {
